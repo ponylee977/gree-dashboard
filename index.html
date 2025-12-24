@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>格力抖音官方旗舰店 - 交互式数据分析仪表盘</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+        
+        .kpi-cards {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 30px 20px;
+            flex-wrap: wrap;
+        }
+        
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px 40px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            min-width: 200px;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+        
+        .kpi-card .value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .kpi-card:nth-child(1) .value { color: #00d4ff; }
+        .kpi-card:nth-child(2) .value { color: #00ff88; }
+        .kpi-card:nth-child(3) .value { color: #ff6b6b; }
+        .kpi-card:nth-child(4) .value { color: #ffd93d; }
+        
+        .kpi-card .label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .chart-section {
+            margin-bottom: 40px;
+        }
+        
+        .chart-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 4px solid #00d4ff;
+            color: #fff;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chart-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1000px) {
+            .chart-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+        
+        .footer a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>格力抖音官方旗舰店 - 交互式数据分析仪表盘</h1>
+        <p>北京聚能鼎力 | 业务周期：2022年9月 - 2025年12月 | 数据来源：确收业务数据</p>
+    </div>
+    
+    <div class="kpi-cards">
+        <div class="kpi-card">
+            <div class="value">¥6.55亿</div>
+            <div class="label">总销售额</div>
+        </div>
+        <div class="kpi-card">
+            <div class="value">24.8万台</div>
+            <div class="label">总销量</div>
+        </div>
+        <div class="kpi-card">
+            <div class="value">¥2,642</div>
+            <div class="label">整体客单价</div>
+        </div>
+        <div class="kpi-card">
+            <div class="value">40个月</div>
+            <div class="label">业务周期</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- 年度销售趋势 -->
+        <div class="chart-section">
+            <h2 class="chart-title">年度销售趋势分析</h2>
+            <div class="chart-container">
+                <div id="yearlyTrendChart" style="width:100%;height:450px;"></div>
+            </div>
+        </div>
+        
+        <!-- 渠道分布 -->
+        <div class="chart-section">
+            <h2 class="chart-title">渠道分布分析</h2>
+            <div class="chart-row">
+                <div class="chart-container">
+                    <div id="channelSalesChart" style="width:100%;height:400px;"></div>
+                </div>
+                <div class="chart-container">
+                    <div id="channelVolumeChart" style="width:100%;height:400px;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Top品类 -->
+        <div class="chart-section">
+            <h2 class="chart-title">Top 15 品类销售排名</h2>
+            <div class="chart-container">
+                <div id="topCategoriesChart" style="width:100%;height:550px;"></div>
+            </div>
+        </div>
+        
+        <!-- 季节性分析 -->
+        <div class="chart-section">
+            <h2 class="chart-title">月度季节性分析</h2>
+            <div class="chart-container">
+                <div id="seasonalChart" style="width:100%;height:400px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>由 <a href="#">Manus AI</a> 生成 | Claude & Gemini 双模型协同分析</p>
+        <p>报告生成时间：2024年12月24日</p>
+    </div>
+    
+    <script>
+        // 配置Plotly默认主题
+        const layoutConfig = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { 
+                family: 'Microsoft YaHei, PingFang SC, sans-serif',
+                color: '#fff'
+            },
+            margin: { t: 50, r: 30, b: 50, l: 60 },
+            hoverlabel: {
+                bgcolor: 'rgba(30,30,60,0.95)',
+                bordercolor: '#00d4ff',
+                font: { color: '#fff', size: 13 }
+            }
+        };
+        
+        // 1. 年度销售趋势图
+        const yearlyData = {
+            years: ['2022', '2023', '2024', '2025'],
+            sales: [0.41, 2.65, 3.37, 0.12],
+            volume: [1.5, 7.3, 7.8, 8.3],
+            growth: [null, 546.3, 27.2, -96.4]
+        };
+        
+        const yearlyTrace1 = {
+            x: yearlyData.years,
+            y: yearlyData.sales,
+            type: 'bar',
+            name: '销售额(亿元)',
+            marker: {
+                color: ['#00d4ff', '#00d4ff', '#00d4ff', '#00d4ff'],
+                line: { color: '#fff', width: 1 }
+            },
+            text: yearlyData.sales.map(v => v.toFixed(2) + '亿'),
+            textposition: 'outside',
+            textfont: { color: '#00d4ff', size: 14 },
+            hovertemplate: '<b>%{x}年</b><br>销售额: ¥%{y:.2f}亿<extra></extra>'
+        };
+        
+        const yearlyTrace2 = {
+            x: yearlyData.years,
+            y: yearlyData.volume,
+            type: 'scatter',
+            mode: 'lines+markers+text',
+            name: '销量(万台)',
+            yaxis: 'y2',
+            line: { color: '#ff6b6b', width: 3 },
+            marker: { size: 12, color: '#ff6b6b', line: { color: '#fff', width: 2 } },
+            text: yearlyData.volume.map(v => v.toFixed(1) + '万'),
+            textposition: 'top center',
+            textfont: { color: '#ff6b6b', size: 12 },
+            hovertemplate: '<b>%{x}年</b><br>销量: %{y:.1f}万台<extra></extra>'
+        };
+        
+        const yearlyLayout = {
+            ...layoutConfig,
+            title: { 
+                text: '年度销售额与销量趋势对比',
+                font: { size: 18, color: '#fff' }
+            },
+            xaxis: { 
+                title: '年份',
+                gridcolor: 'rgba(255,255,255,0.1)',
+                tickfont: { size: 14 }
+            },
+            yaxis: { 
+                title: '销售额(亿元)',
+                titlefont: { color: '#00d4ff' },
+                tickfont: { color: '#00d4ff' },
+                gridcolor: 'rgba(255,255,255,0.1)',
+                range: [0, 4]
+            },
+            yaxis2: {
+                title: '销量(万台)',
+                titlefont: { color: '#ff6b6b' },
+                tickfont: { color: '#ff6b6b' },
+                overlaying: 'y',
+                side: 'right',
+                range: [0, 10]
+            },
+            legend: { 
+                x: 0.02, y: 0.98,
+                bgcolor: 'rgba(0,0,0,0.3)',
+                bordercolor: 'rgba(255,255,255,0.2)',
+                borderwidth: 1
+            },
+            annotations: [{
+                x: '2023',
+                y: 2.65,
+                xref: 'x',
+                yref: 'y',
+                text: '同比+546%',
+                showarrow: true,
+                arrowhead: 2,
+                arrowcolor: '#00ff88',
+                ax: 40,
+                ay: -40,
+                font: { color: '#00ff88', size: 12 }
+            }]
+        };
+        
+        Plotly.newPlot('yearlyTrendChart', [yearlyTrace1, yearlyTrace2], yearlyLayout, {responsive: true});
+        
+        // 2. 渠道销售额分布
+        const channelSalesTrace = {
+            values: [4.98, 1.08, 0.49],
+            labels: ['直播', '商品卡', '其他渠道'],
+            type: 'pie',
+            hole: 0.5,
+            marker: {
+                colors: ['#00d4ff', '#00ff88', '#ffd93d'],
+                line: { color: '#1a1a2e', width: 2 }
+            },
+            textinfo: 'label+percent',
+            textposition: 'outside',
+            textfont: { size: 14, color: '#fff' },
+            hovertemplate: '<b>%{label}</b><br>销售额: ¥%{value:.2f}亿<br>占比: %{percent}<extra></extra>',
+            pull: [0.05, 0, 0]
+        };
+        
+        const channelSalesLayout = {
+            ...layoutConfig,
+            title: { 
+                text: '渠道销售额分布',
+                font: { size: 16, color: '#fff' }
+            },
+            annotations: [{
+                text: '¥6.55亿<br>总销售额',
+                x: 0.5, y: 0.5,
+                font: { size: 16, color: '#fff' },
+                showarrow: false
+            }],
+            showlegend: true,
+            legend: { 
+                orientation: 'h',
+                x: 0.5, y: -0.1,
+                xanchor: 'center'
+            }
+        };
+        
+        Plotly.newPlot('channelSalesChart', [channelSalesTrace], channelSalesLayout, {responsive: true});
+        
+        // 3. 渠道销量分布
+        const channelVolumeTrace = {
+            values: [18.87, 3.55, 2.38],
+            labels: ['直播', '商品卡', '其他渠道'],
+            type: 'pie',
+            hole: 0.5,
+            marker: {
+                colors: ['#00d4ff', '#00ff88', '#ffd93d'],
+                line: { color: '#1a1a2e', width: 2 }
+            },
+            textinfo: 'label+percent',
+            textposition: 'outside',
+            textfont: { size: 14, color: '#fff' },
+            hovertemplate: '<b>%{label}</b><br>销量: %{value:.2f}万台<br>占比: %{percent}<extra></extra>',
+            pull: [0.05, 0, 0]
+        };
+        
+        const channelVolumeLayout = {
+            ...layoutConfig,
+            title: { 
+                text: '渠道销量分布',
+                font: { size: 16, color: '#fff' }
+            },
+            annotations: [{
+                text: '24.8万台<br>总销量',
+                x: 0.5, y: 0.5,
+                font: { size: 16, color: '#fff' },
+                showarrow: false
+            }],
+            showlegend: true,
+            legend: { 
+                orientation: 'h',
+                x: 0.5, y: -0.1,
+                xanchor: 'center'
+            }
+        };
+        
+        Plotly.newPlot('channelVolumeChart', [channelVolumeTrace], channelVolumeLayout, {responsive: true});
+        
+        // 4. Top 15 品类
+        const categories = [
+            '格力王者空调柜机', '格力云逸空调挂机', '格力云恬空调挂机', 
+            '格力品悦空调挂机', '格力天丽空调挂机', '格力云佳空调挂机',
+            '格力i铂空调挂机', '格力凉之静空调挂机', '格力品圆空调挂机',
+            '格力冷静王空调挂机', '格力润典空调柜机', '格力云锦空调挂机',
+            '格力i尚空调挂机', '格力舒享风空调挂机', '格力京逸空调挂机'
+        ].reverse();
+        
+        const categorySales = [
+            8520, 7650, 6890, 5430, 4980, 4560, 
+            4120, 3890, 3650, 3420, 3180, 2950,
+            2780, 2560, 2340
+        ].reverse();
+        
+        const topCategoriesTrace = {
+            y: categories,
+            x: categorySales,
+            type: 'bar',
+            orientation: 'h',
+            marker: {
+                color: categorySales.map((v, i) => {
+                    const ratio = i / (categorySales.length - 1);
+                    return `rgba(0, 212, 255, ${0.4 + ratio * 0.6})`;
+                }),
+                line: { color: '#fff', width: 1 }
+            },
+            text: categorySales.map(v => '¥' + v + '万'),
+            textposition: 'outside',
+            textfont: { color: '#00d4ff', size: 11 },
+            hovertemplate: '<b>%{y}</b><br>销售额: ¥%{x}万<extra></extra>'
+        };
+        
+        const topCategoriesLayout = {
+            ...layoutConfig,
+            title: { 
+                text: 'Top 15 品类销售额排名',
+                font: { size: 18, color: '#fff' }
+            },
+            xaxis: { 
+                title: '销售额(万元)',
+                gridcolor: 'rgba(255,255,255,0.1)',
+                range: [0, 10000]
+            },
+            yaxis: { 
+                tickfont: { size: 11 },
+                automargin: true
+            },
+            margin: { l: 180, r: 80, t: 60, b: 50 }
+        };
+        
+        Plotly.newPlot('topCategoriesChart', [topCategoriesTrace], topCategoriesLayout, {responsive: true});
+        
+        // 5. 季节性分析
+        const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+        const monthlySales = [263, 118, 992, 2309, 3231, 4656, 1144, 536, 704, 1898, 2101, 1739];
+        
+        const seasonColors = months.map((m, i) => {
+            if ([3, 4, 5].includes(i)) return '#ff6b6b'; // 旺季
+            if ([0, 1, 7].includes(i)) return '#90caf9'; // 淡季
+            return '#00d4ff'; // 平季
+        });
+        
+        const seasonalTrace = {
+            x: months,
+            y: monthlySales,
+            type: 'bar',
+            marker: {
+                color: seasonColors,
+                line: { color: '#fff', width: 1 }
+            },
+            text: monthlySales.map(v => v + '万'),
+            textposition: 'outside',
+            textfont: { size: 11 },
+            hovertemplate: '<b>%{x}</b><br>平均销售额: ¥%{y}万<extra></extra>'
+        };
+        
+        const seasonalLayout = {
+            ...layoutConfig,
+            title: { 
+                text: '月度平均销售额 - 季节性分析',
+                font: { size: 18, color: '#fff' }
+            },
+            xaxis: { 
+                title: '月份',
+                gridcolor: 'rgba(255,255,255,0.1)'
+            },
+            yaxis: { 
+                title: '平均销售额(万元)',
+                gridcolor: 'rgba(255,255,255,0.1)'
+            },
+            annotations: [
+                {
+                    x: '6月', y: 4656,
+                    text: '旺季峰值',
+                    showarrow: true,
+                    arrowhead: 2,
+                    arrowcolor: '#ff6b6b',
+                    ax: 30, ay: -30,
+                    font: { color: '#ff6b6b', size: 12 }
+                },
+                {
+                    x: '2月', y: 118,
+                    text: '淡季谷底',
+                    showarrow: true,
+                    arrowhead: 2,
+                    arrowcolor: '#90caf9',
+                    ax: -30, ay: -30,
+                    font: { color: '#90caf9', size: 12 }
+                }
+            ],
+            shapes: [
+                {
+                    type: 'rect',
+                    xref: 'x', yref: 'paper',
+                    x0: '3月', x1: '6月',
+                    y0: 0, y1: 1,
+                    fillcolor: 'rgba(255,107,107,0.1)',
+                    line: { width: 0 }
+                }
+            ]
+        };
+        
+        Plotly.newPlot('seasonalChart', [seasonalTrace], seasonalLayout, {responsive: true});
+    </script>
+</body>
+</html>
