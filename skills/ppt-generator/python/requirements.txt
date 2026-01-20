@@ -1,9 +1,23 @@
-# Nano Banana Pro PPT Generator - Python Dependencies
+# Manus Clone PPT Generator - Python Dependencies
+# 双模型协作: Gemini (框架) + Claude (内容)
+
+# Google Gemini SDK
 google-genai>=1.0.0
+
+# PPT生成
 python-pptx>=0.6.23
 Pillow>=10.0.0
+
+# 环境和配置
 python-dotenv>=1.0.0
+
+# HTTP客户端 (Claude API)
+httpx>=0.27.0
 aiohttp>=3.9.0
-asyncio
+
+# CLI和UI
 rich>=13.0.0
 typer>=0.9.0
+
+# 异步支持
+asyncio
