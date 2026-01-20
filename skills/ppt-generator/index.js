@@ -38,7 +38,182 @@ const SLIDE_STYLES = {
     subtitle: { color: 'FF6B6B', fontSize: 18 },
     body: { color: 'FFFFFF', fontSize: 14 },
     accent: '00D4FF'
+  },
+  dark_tech: {
+    background: { color: '0A0A0F' },
+    title: { color: '00F5FF', fontSize: 36, bold: true },
+    subtitle: { color: 'A855F7', fontSize: 18 },
+    body: { color: 'E0E0E0', fontSize: 14 },
+    accent: '00FF88'
+  },
+  gradient_blue: {
+    background: { color: '667EEA' },
+    title: { color: 'FFFFFF', fontSize: 36, bold: true },
+    subtitle: { color: 'E0F7FF', fontSize: 18 },
+    body: { color: 'FFFFFF', fontSize: 14 },
+    accent: 'FFD700'
+  },
+  corporate: {
+    background: { color: 'FAFAFA' },
+    title: { color: '003366', fontSize: 36, bold: true },
+    subtitle: { color: '666666', fontSize: 18 },
+    body: { color: '333333', fontSize: 14 },
+    accent: 'FF6600'
   }
+};
+
+// Manus风格的Prompt模板 - 深度优化的幻灯片生成提示词
+const MANUS_STYLE_PROMPTS = {
+  professional: `
+Create a professional business presentation slide with these specifications:
+
+**Visual Design:**
+- Background: Deep navy blue gradient (#0F3460 to #1A1A2E)
+- Primary text: Bright cyan (#00D4FF) for titles
+- Secondary text: Clean white (#FFFFFF) for body
+- Accent color: Electric green (#00FF88) for highlights
+- Modern sans-serif typography, clean and readable
+
+**Layout Rules:**
+- Title positioned at top-left with bold weight
+- Clear visual hierarchy with proper spacing
+- Adequate padding (min 5% margins)
+- Text must be crystal clear and anti-aliased
+
+**Content:**
+{content}
+
+**Critical Requirements:**
+- Text must be perfectly legible, no blur or artifacts
+- Chinese characters must render correctly with proper fonts
+- Maintain professional corporate aesthetic
+- Resolution: 1920x1080 pixels
+`,
+  minimal: `
+Create a minimalist presentation slide with clean aesthetics:
+
+**Visual Design:**
+- Background: Pure white (#FFFFFF)
+- Primary text: Dark charcoal (#1A1A2E) for titles
+- Secondary text: Medium gray (#666666) for body
+- Accent: Single color highlight (#0F3460)
+- Generous whitespace, breathing room
+
+**Layout Rules:**
+- Centered or left-aligned content
+- Large, bold typography for impact
+- Minimal decorative elements
+- Focus on content clarity
+
+**Content:**
+{content}
+
+**Critical Requirements:**
+- Extreme clarity and readability
+- Chinese text with elegant font rendering
+- Clean, uncluttered composition
+- Resolution: 1920x1080 pixels
+`,
+  vibrant: `
+Create a vibrant, energetic presentation slide:
+
+**Visual Design:**
+- Background: Dark gradient with colorful accents (#1A1A2E base)
+- Primary text: Bright yellow (#FFD93D) for titles
+- Secondary text: Coral red (#FF6B6B) for emphasis
+- Body text: White (#FFFFFF)
+- Dynamic, modern feel with subtle glow effects
+
+**Layout Rules:**
+- Bold, attention-grabbing typography
+- Asymmetric layouts welcome
+- Color blocks for emphasis
+- High contrast for readability
+
+**Content:**
+{content}
+
+**Critical Requirements:**
+- Vivid colors but still professional
+- Text remains highly legible
+- Chinese characters properly rendered
+- Resolution: 1920x1080 pixels
+`,
+  dark_tech: `
+Create a dark technology-themed presentation slide:
+
+**Visual Design:**
+- Background: Near-black with subtle tech patterns (#0a0a0f)
+- Primary text: Neon cyan (#00f5ff) for titles
+- Secondary text: Electric purple (#a855f7) for accents
+- Body text: Light gray (#e0e0e0)
+- Subtle grid or circuit patterns in background
+
+**Layout Rules:**
+- Futuristic, cutting-edge aesthetic
+- Glowing text effects (subtle)
+- Clean geometric shapes
+- Tech-inspired iconography
+
+**Content:**
+{content}
+
+**Critical Requirements:**
+- High-tech appearance
+- All text clearly readable
+- Chinese support maintained
+- Resolution: 1920x1080 pixels
+`,
+  gradient_blue: `
+Create an elegant blue gradient presentation slide:
+
+**Visual Design:**
+- Background: Smooth blue gradient (#667eea to #764ba2)
+- Primary text: White (#FFFFFF) for titles
+- Secondary text: Light cyan (#e0f7ff)
+- Accent: Golden yellow (#ffd700)
+- Soft, professional gradients
+
+**Layout Rules:**
+- Elegant, flowing design
+- Smooth transitions
+- Professional corporate look
+- Balanced composition
+
+**Content:**
+{content}
+
+**Critical Requirements:**
+- Premium, polished appearance
+- Perfect text legibility on gradient
+- Chinese text beautifully rendered
+- Resolution: 1920x1080 pixels
+`,
+  corporate: `
+Create a standard corporate presentation slide:
+
+**Visual Design:**
+- Background: White with subtle gray accents (#FAFAFA)
+- Primary text: Corporate blue (#003366) for titles
+- Secondary text: Dark gray (#333333)
+- Accent: Brand orange (#FF6600) or teal (#008080)
+- Clean, trustworthy aesthetic
+
+**Layout Rules:**
+- Standard business formatting
+- Logo placement area (top-right)
+- Footer with page numbers
+- Conservative, reliable design
+
+**Content:**
+{content}
+
+**Critical Requirements:**
+- Professional and trustworthy
+- Excellent readability
+- Standard business proportions
+- Resolution: 1920x1080 pixels
+`
 };
 
 /**
@@ -67,10 +242,12 @@ class NanoBananaClient {
     const {
       style = 'professional',
       aspectRatio = '16:9',
-      language = 'zh-CN'
+      language = 'zh-CN',
+      slideNumber = 1,
+      totalSlides = 1
     } = options;
 
-    const slidePrompt = this._buildSlidePrompt(prompt, style, aspectRatio, language);
+    const slidePrompt = this._buildSlidePrompt(prompt, style, aspectRatio, language, slideNumber, totalSlides);
 
     try {
       const result = await this.model.generateContent(slidePrompt);
@@ -92,57 +269,63 @@ class NanoBananaClient {
   }
 
   /**
-   * 构建幻灯片生成提示词
+   * 构建幻灯片生成提示词 - Manus风格深度优化
    */
-  _buildSlidePrompt(content, style, aspectRatio, language) {
-    const styleGuides = {
-      professional: '专业商务风格，深蓝色背景，青色和白色文字，简洁现代',
-      minimal: '极简白色风格，大量留白，黑色文字，优雅简约',
-      vibrant: '活力渐变风格，深色背景配亮色文字，动感现代'
-    };
+  _buildSlidePrompt(content, style, aspectRatio, language, slideNumber = 1, totalSlides = 1) {
+    // 使用Manus风格的提示词模板
+    const template = MANUS_STYLE_PROMPTS[style] || MANUS_STYLE_PROMPTS.professional;
 
-    return `Create a professional presentation slide image with the following specifications:
+    // 添加幻灯片位置信息
+    let positionHint = '';
+    if (slideNumber === 1) {
+      positionHint = '\n**Slide Type:** Title/Cover slide - make it impactful and memorable';
+    } else if (slideNumber === totalSlides) {
+      positionHint = '\n**Slide Type:** Closing slide - include "Thank You" or call-to-action feel';
+    } else {
+      positionHint = `\n**Slide Type:** Content slide (${slideNumber} of ${totalSlides})`;
+    }
 
-Content: ${content}
+    // 语言提示
+    const langHint = language === 'zh-CN'
+      ? '\n**Language:** Chinese (Simplified) - ensure all Chinese characters are rendered clearly'
+      : '\n**Language:** English';
 
-Style Requirements:
-- Style: ${styleGuides[style] || styleGuides.professional}
-- Aspect Ratio: ${aspectRatio}
-- Language: ${language === 'zh-CN' ? 'Chinese (Simplified)' : 'English'}
-- Text must be clear, readable, and professionally typeset
-- Use high contrast for readability
-- Include appropriate visual hierarchy
-- Make it look like a polished corporate presentation slide
-
-Important: Generate a complete slide image, not a template. The text should be rendered directly on the image with proper formatting.`;
+    return template.replace('{content}', content + positionHint + langHint);
   }
 
   /**
-   * 批量生成多张幻灯片
+   * 批量生成多张幻灯片 - 支持幻灯片位置感知
    */
   async generateMultipleSlides(slides, options = {}) {
     const results = [];
+    const totalSlides = slides.length;
 
     for (let i = 0; i < slides.length; i++) {
-      console.log(`Generating slide ${i + 1}/${slides.length}...`);
+      console.log(`🍌 Generating slide ${i + 1}/${slides.length}...`);
       try {
-        const imageBuffer = await this.generateSlideImage(slides[i], options);
+        const imageBuffer = await this.generateSlideImage(slides[i], {
+          ...options,
+          slideNumber: i + 1,
+          totalSlides
+        });
         results.push({
           index: i,
           success: true,
           image: imageBuffer
         });
+        console.log(`   ✓ Slide ${i + 1} generated successfully`);
       } catch (error) {
         results.push({
           index: i,
           success: false,
           error: error.message
         });
+        console.log(`   ✗ Slide ${i + 1} failed: ${error.message}`);
       }
 
       // 添加延迟避免API限流
       if (i < slides.length - 1) {
-        await this._delay(1000);
+        await this._delay(1500);
       }
     }
 

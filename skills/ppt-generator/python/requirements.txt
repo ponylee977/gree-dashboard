@@ -1,0 +1,9 @@
+# Nano Banana Pro PPT Generator - Python Dependencies
+google-genai>=1.0.0
+python-pptx>=0.6.23
+Pillow>=10.0.0
+python-dotenv>=1.0.0
+aiohttp>=3.9.0
+asyncio
+rich>=13.0.0
+typer>=0.9.0
