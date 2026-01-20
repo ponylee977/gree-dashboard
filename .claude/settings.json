@@ -1,0 +1,16 @@
+{
+  "skills": {
+    "ppt": {
+      "name": "PPT Generator",
+      "description": "智能战友PPT生成器 - 三重AI协作",
+      "path": "skills/ppt-generator/python/intelligent_ppt_strategist.py",
+      "command": "/ppt"
+    }
+  },
+  "env": {
+    "GEMINI_API_KEY": "${GEMINI_API_KEY}",
+    "CLAUDE_API_KEY": "${CLAUDE_API_KEY}",
+    "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}",
+    "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+  }
+}

@@ -1,159 +1,181 @@
-# PPT Generator Skill
+# 智能战友PPT生成器 v3.1
 
-使用 **Nano Banana Pro** (Gemini 3 Pro) 生成高质量PPT演示文稿的技能模块。
+> 不是工具，是你的战略伙伴。预判你的预判，分析你的受众，优化你的效果。
 
-## 特性
+## 三重AI协作架构
 
-- 调用 Nano Banana Pro API 生成精美幻灯片图像
-- 支持中文文本渲染，清晰可读
-- 多种预设风格：专业商务、极简白色、活力渐变
-- 支持从仪表盘数据自动生成报告
-- 提供 CLI 工具和 REST API 接口
+```
+┌─────────────────────────────────────────────────────────┐
+│  Gemini 3 Pro Preview                                   │
+│  负责: PPT框架、结构、大纲、逻辑流程                     │
+│  • 麦肯锡/BCG级别的结构化思维                           │
+│  • 金字塔原理、MECE、SCQA框架                           │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│  Claude Opus 4.5                                        │
+│  负责: 内容填充、文案润色、质量检查                      │
+│  • 严格按照Gemini框架填充内容                           │
+│  • 专业商务文案                                         │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│  Gemini 2.0 Flash                                       │
+│  负责: 8K超高清渲染 (7680x4320)                         │
+│  • 中文/英文/数字清晰呈现                               │
+└─────────────────────────────────────────────────────────┘
+```
 
 ## 快速开始
 
-### 1. 安装依赖
+### 方式1: 使用快捷脚本
 
 ```bash
-cd gree-dashboard
-npm install
+cd skills/ppt-generator
+./generate.sh "2025年Q1业绩分析报告"
 ```
 
-### 2. 配置 API 密钥
-
-复制环境变量示例文件并填入您的 Gemini API 密钥：
+### 方式2: 直接运行Python
 
 ```bash
-cp .env.example .env
+cd skills/ppt-generator/python
+pip install -r requirements.txt
+python intelligent_ppt_strategist.py -t "报告主题"
 ```
 
-编辑 `.env` 文件：
+### 方式3: 完整参数
+
+```bash
+python intelligent_ppt_strategist.py \
+  -t "2025年Q1业绩分析" \
+  -c "销售额6.55亿，增长546%" \
+  -a "c_suite" \
+  -g "report"
+```
+
+## 参数说明
+
+| 参数 | 说明 | 可选值 |
+|------|------|--------|
+| `-t, --topic` | 报告主题 | 任意文本 |
+| `-c, --content` | 内容描述 | 任意文本 |
+| `-a, --audience` | 受众类型 | 见下表 |
+| `-g, --goal` | 演示目标 | 见下表 |
+| `-d, --from-dashboard` | 使用仪表盘数据 | - |
+| `--no-analysis` | 跳过智能分析 | - |
+| `--no-prediction` | 跳过效果预判 | - |
+
+### 受众类型
+
+| 值 | 说明 |
+|----|------|
+| `c_suite` | CEO/CFO/CTO等高管 |
+| `board` | 董事会 |
+| `investors` | 投资人/VC/PE |
+| `clients` | 客户/甲方 |
+| `internal` | 内部团队 |
+| `government` | 政府/监管机构 |
+| `sales` | 销售场景 |
+| `training` | 培训场景 |
+
+### 演示目标
+
+| 值 | 说明 |
+|----|------|
+| `report` | 汇报工作 |
+| `pitch` | 融资/商业路演 |
+| `persuade` | 说服/获取支持 |
+| `inform` | 传达信息 |
+| `teach` | 教学/培训 |
+
+## 7阶段生成流程
+
+1. **Phase 1: Claude战略分析** - 受众分析、目标识别、关键词提取
+2. **Phase 2: Gemini框架设计** - 麦肯锡级PPT结构设计 (核心!)
+3. **Phase 3: 智能风格选择** - 根据受众+目标自动匹配风格
+4. **Phase 4: Claude内容填充** - 按框架填充专业文案
+5. **Phase 5: Gemini 8K渲染** - 7680x4320超高清图像
+6. **Phase 6: PPT组装** - 生成可编辑PPTX文件
+7. **Phase 7: 效果预判** - 预测受众反应
+
+## 与Manus对比
+
+| 功能 | Manus | 智能战友 |
+|------|-------|----------|
+| 最大分辨率 | 4K (4096px) | **8K (7680px)** |
+| 页数限制 | 12页 | **无限制** |
+| 订阅费用 | $40/月 | **$0** |
+| API等级 | 入门级 | **顶配Opus 4.5** |
+| 数据时效 | 可能2024年 | **强制2025年** |
+| 实时搜索 | ❌ | **Perplexity** |
+| 网页抓取 | ❌ | **Firecrawl** |
+| 受众分析 | ❌ | **智能预判** |
+| 效果预判 | ❌ | **预测反馈** |
+| 框架设计 | 通用模板 | **Gemini定制** |
+
+## 环境配置
+
+在项目根目录创建 `.env` 文件:
 
 ```env
-GEMINI_API_KEY=your_gemini_api_key_here
+# Gemini API (框架 + 图像)
+GEMINI_API_KEY=your_gemini_api_key
+
+# Claude API (内容填充)
+CLAUDE_API_KEY=your_claude_api_key
+
+# Perplexity API (实时搜索) - 可选
+PERPLEXITY_API_KEY=your_perplexity_key
+
+# Firecrawl API (网页抓取) - 可选
+FIRECRAWL_API_KEY=your_firecrawl_key
 ```
 
-> 获取 API 密钥: https://aistudio.google.com/app/apikey
+## 输出
 
-### 3. 生成 PPT
+生成的PPT保存在 `./output/` 目录:
 
-#### CLI 方式
+```
+{主题}_智能_{页数}页_{时间戳}.pptx
+```
+
+## 框架模板
+
+系统内置6种商业框架模板:
+
+| 框架 | 适用场景 | 原则 |
+|------|----------|------|
+| executive_report | 高管汇报 | 金字塔原理 |
+| investor_pitch | 投资路演 | 故事线叙事 |
+| sales_proposal | 销售提案 | SPIN销售 |
+| strategy_review | 战略回顾 | SWOT分析 |
+| project_update | 项目汇报 | RAG状态 |
+| training | 培训教学 | 布鲁姆层次 |
+
+## 目录结构
+
+```
+skills/ppt-generator/
+├── generate.sh           # 快捷启动脚本
+├── README.md            # 本文件
+├── python/
+│   ├── intelligent_ppt_strategist.py  # 主程序 v3.1
+│   ├── enterprise_ppt_generator.py    # 企业版(含Perplexity)
+│   ├── manus_clone_ppt.py             # Manus克隆版
+│   ├── nanobanana_ppt.py              # 基础版
+│   └── requirements.txt               # Python依赖
+└── index.js             # Node.js版本
+```
+
+## Claude Max导入
+
+将 `.claude/` 目录复制到你的项目中:
 
 ```bash
-# 从仪表盘数据生成
-npm run generate-ppt -- --from-dashboard
-
-# 从 JSON 文件生成
-npm run generate-ppt -- -t "我的演示" -s skills/ppt-generator/examples/slides.json
-
-# 查看帮助
-npm run generate-ppt -- --help
+cp -r .claude/ ~/your-project/
 ```
 
-#### API 方式
-
-启动服务器：
-
-```bash
-npm start
+然后在Claude Code中使用:
 ```
-
-调用 API：
-
-```bash
-# 生成 PPT
-curl -X POST http://localhost:3000/api/generate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "测试演示",
-    "slides": [
-      {"title": "封面", "subtitle": "副标题"},
-      {"title": "内容页", "bullets": ["要点1", "要点2"]}
-    ],
-    "style": "professional"
-  }'
+/ppt 2025年Q1业绩分析
 ```
-
-## API 接口
-
-| 端点 | 方法 | 描述 |
-|------|------|------|
-| `/api/health` | GET | 健康检查 |
-| `/api/styles` | GET | 获取可用风格 |
-| `/api/generate` | POST | 生成 PPT |
-| `/api/generate/dashboard` | POST | 从仪表盘数据生成 |
-| `/api/generate/slide-image` | POST | 生成单张幻灯片图像 |
-| `/api/download/:fileName` | GET | 下载 PPT 文件 |
-| `/api/files` | GET | 列出已生成文件 |
-
-## 幻灯片格式
-
-```json
-[
-  {
-    "title": "标题",
-    "subtitle": "副标题"
-  },
-  {
-    "title": "内容页标题",
-    "content": "正文内容",
-    "bullets": ["要点1", "要点2", "要点3"]
-  },
-  "简单文本幻灯片"
-]
-```
-
-## 可用风格
-
-- **professional**: 专业商务 - 深蓝色背景，青色和白色文字
-- **minimal**: 极简白色 - 白色背景，黑色文字
-- **vibrant**: 活力渐变 - 深色背景配亮色文字
-
-## 编程接口
-
-```javascript
-import { PPTGenerator } from './skills/ppt-generator/index.js';
-
-const generator = new PPTGenerator(process.env.GEMINI_API_KEY);
-
-// 生成 PPT
-const outputPath = await generator.generate({
-  title: '我的演示',
-  slides: [
-    { title: '封面', subtitle: '使用 Nano Banana Pro' },
-    { title: '内容', bullets: ['要点1', '要点2'] }
-  ],
-  style: 'professional',
-  useNanoBanana: true
-});
-
-// 从仪表盘数据生成
-const reportPath = await generator.generateFromDashboard({
-  title: '数据分析报告',
-  kpis: [{ label: '销售额', value: '¥100万' }],
-  charts: [{ title: '趋势图', highlights: ['增长10%'] }],
-  insights: ['核心洞察1', '核心洞察2']
-});
-```
-
-## 技术栈
-
-- **Nano Banana Pro** (Gemini 3 Pro): Google 最新图像生成模型
-- **pptxgenjs**: PowerPoint 文件生成
-- **Express**: REST API 服务
-- **Node.js**: 运行时环境
-
-## 关于 Nano Banana Pro
-
-Nano Banana Pro 是 Google DeepMind 推出的最新图像生成模型，基于 Gemini 3 Pro 架构。其特点：
-
-- 能够准确渲染清晰、可读的文本
-- 专门优化了演示文稿格式的生成
-- 支持多语言文本渲染
-- 生成的图像质量高，适合专业场景
-
-更多信息：https://blog.google/technology/ai/nano-banana-pro/
-
-## License
-
-MIT
