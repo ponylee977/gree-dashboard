@@ -6,12 +6,45 @@ Intelligent PPT Strategist - 智能战友级PPT生成器
 不是死工具，而是你的战略伙伴。
 预判你的预判，分析你的受众，优化你的效果。
 
-核心能力:
-1. 受众智能分析 - 预判PPT给谁看
-2. 风格智能选择 - 根据内容+受众自动选择最佳呈现
-3. 效果预判系统 - 预测发出后的反应和效果
-4. 关键词提取 - 深度分析内容核心
-5. 设计策略 - 像顶级咨询公司一样思考
+============================================================
+                    关键模型分工
+============================================================
+
+┌─────────────────────────────────────────────────────────┐
+│  Gemini 3 Pro Preview (gemini-2.5-flash-preview)        │
+│  ───────────────────────────────────────────────────    │
+│  负责: PPT框架、结构、大纲、逻辑流程                     │
+│  ───────────────────────────────────────────────────    │
+│  • 商业PPT的章节结构设计                                │
+│  • 逻辑递进关系编排                                     │
+│  • 故事线和叙事框架                                     │
+│  • 数据呈现的逻辑顺序                                   │
+│  • 麦肯锡/BCG级别的结构化思维                           │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│  Claude Opus 4.5 (claude-opus-4-5-20251101)             │
+│  ───────────────────────────────────────────────────    │
+│  负责: 内容填充、文案润色、质量检查                      │
+│  ───────────────────────────────────────────────────    │
+│  • 将框架扩展为完整内容                                 │
+│  • 商务文案的专业润色                                   │
+│  • 数据准确性验证                                       │
+│  • 受众分析和效果预判                                   │
+│  • 内容长度和格式控制                                   │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│  Gemini 2.0 Flash (gemini-2.0-flash-exp-image-generation)│
+│  ───────────────────────────────────────────────────    │
+│  负责: 8K幻灯片图像渲染                                  │
+│  ───────────────────────────────────────────────────    │
+│  • 7680x4320 超高清渲染                                 │
+│  • 中文/英文/数字清晰呈现                               │
+│  • 专业视觉设计                                         │
+└─────────────────────────────────────────────────────────┘
+
+============================================================
 
 与Manus对比优势:
 - 8K vs 4K (我们赢)
@@ -22,7 +55,7 @@ Intelligent PPT Strategist - 智能战友级PPT生成器
 - $0 vs $40/月 (我们赢)
 
 Author: Gree Dashboard Team
-Version: 3.0 Intelligent Strategist
+Version: 3.1 Intelligent Strategist (Gemini框架版)
 """
 
 import os
@@ -270,6 +303,222 @@ class IntelligentAnalyzer:
         except Exception as e:
             console.print(f"[yellow]效果预测失败: {e}[/yellow]")
             return {}
+
+
+# ============================================================================
+# Gemini框架架构师 - PPT结构设计的核心
+# ============================================================================
+
+class GeminiFrameworkArchitect:
+    """
+    Gemini 3 Pro Preview 框架架构师
+
+    商业PPT的框架、结构、大纲必须由Gemini来设计:
+    - 麦肯锡/BCG级别的结构化思维
+    - 金字塔原理的逻辑递进
+    - SCQA框架 (Situation-Complication-Question-Answer)
+    - MECE原则 (相互独立，完全穷尽)
+    """
+
+    # 商业PPT框架模板
+    FRAMEWORK_TEMPLATES = {
+        "executive_report": {
+            "name": "高管汇报框架",
+            "structure": ["封面", "执行摘要", "核心发现", "详细分析", "建议方案", "下一步", "附录"],
+            "principle": "金字塔原理: 结论先行，层层递进"
+        },
+        "investor_pitch": {
+            "name": "投资路演框架",
+            "structure": ["愿景", "问题", "解决方案", "市场规模", "商业模式", "竞争优势", "团队", "财务", "融资需求"],
+            "principle": "讲故事: 痛点→方案→价值"
+        },
+        "sales_proposal": {
+            "name": "销售提案框架",
+            "structure": ["客户现状", "问题诊断", "解决方案", "预期效果", "实施计划", "投资回报", "案例参考", "合作建议"],
+            "principle": "SPIN销售: 现状→问题→影响→需求"
+        },
+        "strategy_review": {
+            "name": "战略回顾框架",
+            "structure": ["市场环境", "竞争格局", "业务表现", "问题诊断", "战略选择", "执行计划", "资源配置", "风险管理"],
+            "principle": "SWOT分析 + 战略规划"
+        },
+        "project_update": {
+            "name": "项目汇报框架",
+            "structure": ["项目概况", "进度总览", "里程碑", "关键成果", "问题与风险", "下阶段计划", "资源需求"],
+            "principle": "RAG状态 (Red-Amber-Green)"
+        },
+        "training": {
+            "name": "培训教学框架",
+            "structure": ["学习目标", "背景知识", "核心概念", "案例讲解", "实践练习", "总结回顾", "Q&A"],
+            "principle": "布鲁姆学习层次"
+        }
+    }
+
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.client = genai.Client(api_key=api_key)
+        self.model = "gemini-2.5-flash-preview-04-17"  # Gemini 3 Pro Preview
+        console.print(f"[green]✓[/green] Gemini 框架架构师初始化完成")
+        console.print(f"  模型: [cyan]{self.model}[/cyan]")
+        console.print(f"  职责: [yellow]PPT框架、结构、大纲、逻辑流程[/yellow]")
+
+    async def design_framework(
+        self,
+        topic: str,
+        context: str,
+        audience: str,
+        goal: str,
+        num_slides: int = None
+    ) -> Dict[str, Any]:
+        """
+        设计PPT框架结构
+
+        这是商业PPT的灵魂，必须用Gemini来做！
+
+        Returns:
+            包含完整框架结构的字典
+        """
+        # 选择最合适的框架模板
+        template = self._select_template(audience, goal)
+
+        prompt = f"""你是麦肯锡级别的PPT框架架构师。
+
+**任务:** 为以下主题设计专业的PPT框架结构
+
+**主题:** {topic}
+**背景:** {context}
+**受众:** {audience}
+**目标:** {goal}
+**参考框架:** {template['name']} - {template['principle']}
+**页数建议:** {num_slides if num_slides else '根据内容自动确定，商业报告通常15-30页'}
+
+**框架设计原则:**
+1. 金字塔原理: 结论先行，每页一个核心观点
+2. MECE原则: 相互独立，完全穷尽
+3. SCQA框架: 情境→冲突→问题→答案
+4. 故事线: 有起承转合，引导受众思考
+5. 视觉节奏: 数据页和概念页交替，避免单调
+
+**输出格式 (严格JSON):**
+{{
+    "framework_type": "框架类型",
+    "narrative_arc": "故事线描述 (一句话)",
+    "key_message": "核心信息 (受众应该记住什么)",
+    "logic_flow": "逻辑递进关系描述",
+    "chapters": [
+        {{
+            "chapter_name": "章节名",
+            "chapter_purpose": "本章目的",
+            "slides": [
+                {{
+                    "slide_number": 1,
+                    "slide_type": "cover/executive_summary/data/insight/recommendation/closing",
+                    "title_hint": "标题提示 (15字以内)",
+                    "key_point": "本页核心观点",
+                    "content_hints": ["内容要点1", "内容要点2"],
+                    "visual_suggestion": "视觉建议 (图表类型/布局)",
+                    "transition": "与下一页的过渡逻辑"
+                }}
+            ]
+        }}
+    ],
+    "appendix_suggestions": ["附录建议1", "附录建议2"]
+}}
+
+只输出JSON，不要其他内容。"""
+
+        try:
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.7,
+                    max_output_tokens=8192
+                )
+            )
+            text = response.text
+            json_match = re.search(r'\{[\s\S]*\}', text)
+            if json_match:
+                framework = json.loads(json_match.group())
+                console.print(f"[green]✓[/green] 框架设计完成")
+                console.print(f"  类型: {framework.get('framework_type', '-')}")
+                console.print(f"  故事线: {framework.get('narrative_arc', '-')}")
+                return framework
+            return {}
+        except Exception as e:
+            console.print(f"[red]框架设计失败: {e}[/red]")
+            return {}
+
+    def _select_template(self, audience: str, goal: str) -> Dict:
+        """根据受众和目标选择框架模板"""
+        audience_lower = audience.lower()
+        goal_lower = goal.lower()
+
+        if 'investor' in audience_lower or 'pitch' in goal_lower:
+            return self.FRAMEWORK_TEMPLATES['investor_pitch']
+        elif 'c_suite' in audience_lower or 'board' in audience_lower or 'report' in goal_lower:
+            return self.FRAMEWORK_TEMPLATES['executive_report']
+        elif 'client' in audience_lower or 'sales' in audience_lower:
+            return self.FRAMEWORK_TEMPLATES['sales_proposal']
+        elif 'strategy' in goal_lower:
+            return self.FRAMEWORK_TEMPLATES['strategy_review']
+        elif 'train' in goal_lower or 'teach' in goal_lower:
+            return self.FRAMEWORK_TEMPLATES['training']
+        else:
+            return self.FRAMEWORK_TEMPLATES['project_update']
+
+    async def expand_slide_outline(
+        self,
+        slide_outline: Dict,
+        context: str,
+        data_points: List[str] = None
+    ) -> Dict:
+        """
+        扩展单页幻灯片的详细大纲
+
+        Gemini负责逻辑结构，不负责具体文案
+        """
+        prompt = f"""将以下幻灯片大纲扩展为详细结构:
+
+**大纲:**
+{json.dumps(slide_outline, ensure_ascii=False, indent=2)}
+
+**上下文:**
+{context}
+
+**可用数据点:**
+{json.dumps(data_points, ensure_ascii=False) if data_points else '无'}
+
+**输出 (JSON):**
+{{
+    "title": "标题 (15字以内)",
+    "subtitle": "副标题 (可选)",
+    "structure_type": "bullet_list/comparison/timeline/process/data_highlight",
+    "main_points": ["核心观点1", "核心观点2", "核心观点3"],
+    "supporting_data": ["支撑数据1", "支撑数据2"],
+    "visual_layout": "布局描述",
+    "key_takeaway": "本页核心收获"
+}}
+
+只输出JSON。"""
+
+        try:
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.5,
+                    max_output_tokens=2048
+                )
+            )
+            text = response.text
+            json_match = re.search(r'\{[\s\S]*\}', text)
+            if json_match:
+                return json.loads(json_match.group())
+            return slide_outline
+        except Exception as e:
+            console.print(f"[yellow]大纲扩展失败: {e}[/yellow]")
+            return slide_outline
 
 
 # ============================================================================
@@ -656,7 +905,13 @@ class IntelligentPPTStrategist:
         self.perplexity_key = perplexity_api_key
         self.firecrawl_key = firecrawl_api_key
 
+        # Claude用于内容填充和质量检查
         self.analyzer = IntelligentAnalyzer(claude_api_key)
+
+        # Gemini用于PPT框架设计 - 商业PPT的核心!!!
+        self.framework_architect = GeminiFrameworkArchitect(gemini_api_key)
+
+        # Gemini用于8K图像渲染
         self.gemini_client = genai.Client(api_key=gemini_api_key)
 
         self.output_dir = Path(self.config.output_dir)
@@ -665,7 +920,12 @@ class IntelligentPPTStrategist:
         # 显示对比表
         console.print(MANUS_VS_US)
         console.print(Panel.fit(
-            "[bold cyan]Intelligent PPT Strategist v3.0[/bold cyan]\n\n"
+            "[bold cyan]Intelligent PPT Strategist v3.1[/bold cyan]\n\n"
+            "[yellow]【关键模型分工】[/yellow]\n"
+            "✓ Gemini 3 Pro: PPT框架结构设计\n"
+            "✓ Claude Opus 4.5: 内容填充润色\n"
+            "✓ Gemini 2.0 Flash: 8K图像渲染\n\n"
+            "[green]【优势】[/green]\n"
             "✓ 智能受众分析\n"
             "✓ 风格自动选择\n"
             "✓ 效果预判系统\n"
@@ -722,8 +982,28 @@ class IntelligentPPTStrategist:
             design_rec = {}
             analysis = {}
 
-        # ========== Phase 2: 风格选择 ==========
-        console.print("\n[cyan]Phase 2: 智能风格选择...[/cyan]")
+        # ========== Phase 2: Gemini框架设计 (关键!!!) ==========
+        console.print("\n[cyan]Phase 2: [bold]Gemini 框架架构设计[/bold] (商业PPT核心)...[/cyan]")
+
+        framework = await self.framework_architect.design_framework(
+            topic=self.config.title,
+            context=content + "\n" + context,
+            audience=audience,
+            goal=goal
+        )
+
+        if framework:
+            self._print_framework_report(framework)
+            console.print(f"  [green]✓[/green] 框架设计完成")
+            console.print(f"    类型: {framework.get('framework_type', '-')}")
+            console.print(f"    故事线: {framework.get('narrative_arc', '-')}")
+            console.print(f"    核心信息: {framework.get('key_message', '-')}")
+        else:
+            console.print("  [yellow]⚠[/yellow] 框架设计失败，使用默认结构")
+            framework = {}
+
+        # ========== Phase 3: 风格选择 ==========
+        console.print("\n[cyan]Phase 3: 智能风格选择...[/cyan]")
 
         if self.config.auto_style:
             style, style_reason = StyleSelector.select_style(
@@ -738,32 +1018,33 @@ class IntelligentPPTStrategist:
             style = design_rec.get("recommended_style", "professional")
             style_reason = design_rec.get("style_reason", "默认专业风格")
 
-        # ========== Phase 3: 内容生成 ==========
-        console.print("\n[cyan]Phase 3: 智能内容生成...[/cyan]")
+        # ========== Phase 4: Claude内容填充 ==========
+        console.print("\n[cyan]Phase 4: [bold]Claude 内容填充[/bold]...[/cyan]")
 
         if slides_data:
             slides = slides_data
         else:
-            slides = await self._generate_intelligent_slides(content, context, analysis, audience, goal)
+            # 使用Gemini框架来指导Claude生成内容
+            slides = await self._generate_intelligent_slides(content, context, analysis, audience, goal, framework)
 
         console.print(f"  [green]✓[/green] 生成 {len(slides)} 张幻灯片")
 
-        # ========== Phase 4: 8K渲染 ==========
-        console.print("\n[cyan]Phase 4: 8K超高清渲染...[/cyan]")
+        # ========== Phase 5: 8K渲染 (Gemini) ==========
+        console.print("\n[cyan]Phase 5: [bold]Gemini 8K超高清渲染[/bold]...[/cyan]")
 
         images = await self._render_8k_slides(slides, style, audience, goal, analysis)
 
         success_count = sum(1 for img in images if img is not None)
         console.print(f"  [green]✓[/green] 渲染成功 {success_count}/{len(slides)} 张")
 
-        # ========== Phase 5: 组装PPT ==========
-        console.print("\n[cyan]Phase 5: 组装PPT文件...[/cyan]")
+        # ========== Phase 6: 组装PPT ==========
+        console.print("\n[cyan]Phase 6: 组装PPT文件...[/cyan]")
 
         output_path = await self._assemble_ppt(slides, images, style)
 
-        # ========== Phase 6: 效果预判 ==========
+        # ========== Phase 7: 效果预判 ==========
         if self.config.enable_prediction:
-            console.print("\n[cyan]Phase 6: 效果预判分析...[/cyan]")
+            console.print("\n[cyan]Phase 7: 效果预判分析...[/cyan]")
 
             prediction = await self.analyzer.predict_effect(slides, audience)
 
@@ -781,22 +1062,74 @@ class IntelligentPPTStrategist:
         context: str,
         analysis: Dict,
         audience: str,
-        goal: str
+        goal: str,
+        framework: Dict = None
     ) -> List[Dict]:
-        """生成智能化幻灯片内容"""
-        # 使用Claude生成优化的幻灯片内容
-        system_prompt = f"""你是顶级咨询公司的PPT策略师。
+        """
+        生成智能化幻灯片内容
+
+        关键模型分工:
+        - 框架结构: 由Gemini设计 (已完成, 传入framework参数)
+        - 内容填充: 由Claude完成 (本方法)
+        """
+        # 提取Gemini设计的框架结构
+        framework_guidance = ""
+        if framework:
+            framework_guidance = f"""
+**【Gemini框架架构师设计的PPT结构 - 必须严格遵守】**
+
+框架类型: {framework.get('framework_type', '商业汇报')}
+故事线: {framework.get('narrative_arc', '-')}
+核心信息: {framework.get('key_message', '-')}
+逻辑流程: {framework.get('logic_flow', '-')}
+
+**章节结构:**
+"""
+            chapters = framework.get('chapters', [])
+            for chapter in chapters:
+                framework_guidance += f"\n### {chapter.get('chapter_name', '-')}\n"
+                framework_guidance += f"目的: {chapter.get('chapter_purpose', '-')}\n"
+                for slide in chapter.get('slides', []):
+                    framework_guidance += f"  - 页{slide.get('slide_number', '?')}: {slide.get('title_hint', '-')} ({slide.get('slide_type', '-')})\n"
+                    framework_guidance += f"    核心观点: {slide.get('key_point', '-')}\n"
+
+        # 使用Claude填充具体内容
+        system_prompt = f"""你是顶级咨询公司的PPT内容专家。
+
+**你的角色:** 内容填充和润色
+**框架设计:** 已由Gemini架构师完成 (见下方框架)
 
 当前任务:
 - 受众: {audience}
 - 目标: {goal}
 - 关键词: {analysis.get('content_analysis', {}).get('keywords', [])}
+{framework_guidance}
 
-生成的内容要:
-1. 直击受众痛点
-2. 逻辑清晰有力
-3. 数据准确可信
-4. 每页一个核心观点"""
+**你的任务是:**
+1. 严格按照上述框架结构生成每页内容
+2. 填充专业、准确的文案
+3. 确保数据可信、逻辑清晰
+4. 每页聚焦一个核心观点
+5. 语言简练有力，适合{audience}阅读
+
+**禁止:**
+- 不要改变Gemini设计的框架结构
+- 不要增减页数
+- 不要偏离框架的逻辑流程"""
+
+        user_message = f"""基于以下内容，按照框架结构填充PPT具体内容:
+
+**原始内容:**
+{content}
+
+**上下文:**
+{context}
+
+**输出要求:**
+严格按照框架设计的章节和页面结构，输出JSON数组:
+[{{"title": "标题", "subtitle": "副标题", "bullets": ["要点1", "要点2", "要点3"], "type": "cover/content/data/insight/summary", "key_takeaway": "本页关键收获"}}]
+
+每页对应框架中的一个slide，保持顺序一致。"""
 
         async with httpx.AsyncClient(timeout=120.0) as client:
             response = await client.post(
@@ -808,17 +1141,11 @@ class IntelligentPPTStrategist:
                 },
                 json={
                     "model": "claude-opus-4-5-20251101",
-                    "max_tokens": 8192,
+                    "max_tokens": 16384,
                     "system": system_prompt,
                     "messages": [{
                         "role": "user",
-                        "content": f"""基于以下内容生成PPT幻灯片:
-
-内容: {content}
-上下文: {context}
-
-输出JSON数组格式的幻灯片:
-[{{"title": "标题", "subtitle": "副标题", "bullets": ["要点"], "type": "cover/content/summary"}}]"""
+                        "content": user_message
                     }]
                 }
             )
@@ -1004,6 +1331,30 @@ class IntelligentPPTStrategist:
 
         console.print(table)
 
+    def _print_framework_report(self, framework: Dict):
+        """打印Gemini框架设计报告"""
+        console.print("\n[bold]🏗️ Gemini 框架架构报告[/bold]")
+
+        table = Table(show_header=True, header_style="bold yellow")
+        table.add_column("框架维度", style="yellow", width=15)
+        table.add_column("设计结果", width=55)
+
+        table.add_row("框架类型", framework.get("framework_type", "-"))
+        table.add_row("故事线", framework.get("narrative_arc", "-"))
+        table.add_row("核心信息", framework.get("key_message", "-"))
+        table.add_row("逻辑流程", framework.get("logic_flow", "-"))
+
+        console.print(table)
+
+        # 打印章节结构
+        chapters = framework.get("chapters", [])
+        if chapters:
+            console.print("\n[bold yellow]章节结构:[/bold yellow]")
+            for chapter in chapters:
+                console.print(f"  [cyan]■[/cyan] {chapter.get('chapter_name', '-')}: {chapter.get('chapter_purpose', '-')}")
+                for slide in chapter.get('slides', [])[:5]:  # 最多显示5页
+                    console.print(f"      └ 页{slide.get('slide_number', '?')}: {slide.get('title_hint', '-')}")
+
     def _print_prediction_report(self, prediction: Dict):
         """打印效果预判报告"""
         console.print("\n[bold]🔮 效果预判报告[/bold]")
@@ -1039,6 +1390,10 @@ class IntelligentPPTStrategist:
             f"👥 受众: {audience}\n"
             f"🎯 目标: {goal}\n"
             f"📐 分辨率: 8K (7680x4320)\n\n"
+            f"[yellow]【模型分工】[/yellow]\n"
+            f"  Gemini 3 Pro: 框架结构设计\n"
+            f"  Claude Opus 4.5: 内容填充润色\n"
+            f"  Gemini 2.0 Flash: 8K图像渲染\n\n"
             f"[dim]比Manus强: 8K vs 4K, 无限页 vs 12页, 智能分析 vs 无[/dim]",
             title="🧠 智能战友任务完成"
         ))
